@@ -1,48 +1,34 @@
-import { useState } from "react"
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { LuAsterisk } from "react-icons/lu";
+import type { ILoginData } from "../../types/auth.types";
+import { loginSchema } from "../../schema/auth.schema";
+
 
 const LoginForm = () => {
 
-  const [formData,setFormData] = useState({
+  const {register,watch,handleSubmit,formState:{errors}} = useForm({
+    defaultValues:{
     email:'',
     password:''
+  },
+  resolver:yupResolver(loginSchema),
+  mode:'all'
   })
+
+  // console.log(watch('email'))
+  // console.log(watch('password'))
   
-  const [errors,setErrors] = useState({
-    email:'',
-    password:''
-  })
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    console.log(e.target.name)
-    const name = e.target.name;
-    const value = e.target.value
-    setFormData({...formData,[name]:value})
+  const onSubmit = (data:ILoginData) =>{
+    console.log(data)
   }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) =>{
-    e.preventDefault()
-    console.log(formData)
-    if(!formData.email){
-      setErrors({...errors,email:`email is required.`})
-      return
-    }
-    setErrors({...errors,email:''})
-    if(!formData.password){
-      setErrors({...errors,password:`password is required.`})
-      return
-    }
-    setErrors({...errors,password:''})
-    console.log(e)
-    console.log("On Login Submit")
-    
-  }
-
-  console.log(errors)
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 flex flex-col gap-6">
           {/* input fields */}
           <div className="flex flex-col gap-2">
@@ -54,15 +40,16 @@ const LoginForm = () => {
             </div>
             <input 
               id = {'email'}
-              name={"email"}
+              {...register('email')}
+              value={watch('email')}
               className={
-                "px-2 py-2 border border-violet-400 rounded-md focus:outline-violet-600"}
+                `px-2 py-2 border rounded-md ${errors.email 
+                  ? 'border-red-500  focus:outline-red-500' 
+                  :  'border-violet-400 focus:outline-violet-600'}`}
                 placeholder="example@gmail.com"
-                onChange={handleChange}
-                value={formData.email}
             />
             {
-              errors.email && <p className="text-red-500 text-xs">{errors.email}</p>
+              errors.email && <p className="text-red-500 text-xs h-1 -mt-1" >{errors.email ? errors.email.message : ''}</p>
             }
           </div>
 
@@ -75,14 +62,18 @@ const LoginForm = () => {
             </div>
             <input 
               id={'password'}
-              name={"password"}
-               className="px-2 py-2 border border-violet-400 rounded-md  focus:outline-violet-600" 
+              {...register('password')}
+              value={watch('password')}
+               className={
+                `px-2 py-2 border rounded-md ${errors.password 
+                  ? 'border-red-500  focus:outline-red-500' 
+                  :  'border-violet-400   focus:outline-violet-600'}`
+               } 
                placeholder="********"
               type="password" 
-              onChange={handleChange} value={formData.password}
             />
             {
-              errors.password && <p className="text-red-500 text-xs">{errors.password}</p>
+              errors.password && <p className="text-red-500 text-xs h-1 -mt-1">{errors.password ? errors.password.message : ''}</p>
             }
           </div>
 
