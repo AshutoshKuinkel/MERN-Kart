@@ -1,62 +1,29 @@
-import { useState } from "react"
 import { LuAsterisk } from "react-icons/lu";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { signupSchema } from "../../schema/auth.schema";
+import type { ISignupData } from "../../types/auth.types";
 
 const SignupForm = () => {
 
-  const [formData,setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: ''
+  const {register,handleSubmit,watch,formState:{errors}} = useForm({
+    defaultValues:{
+      firstName:'',
+      lastName:'',
+      email:'',
+      password:'',
+      phone:''
+    },
+    resolver:yupResolver(signupSchema),
+    mode:'all'
   })
 
-  const [errors,setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: ''
-  })
-
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    console.log(e.target.name)
-    const name = e.target.name
-    const value = e.target.value
-    setFormData({...formData,[name]:value})
-
+  const onSubmit = (data:ISignupData)=>{
+    console.log(data)
   }
-
-  const onSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
-    console.log(formData)
-    if(!formData.firstName){
-      setErrors({...errors,firstName:'First Name is required.'})
-      return
-    }
-    if(!formData.lastName){
-      setErrors({...errors,lastName:'Last Name is required.'})
-      return
-    }
-    if(!formData.email){
-      setErrors({...errors,email:'Email is required.'})
-      return
-    }
-    if(!formData.password){
-      setErrors({...errors,password:'Password is required.'})
-      return
-    }
-    if(!formData.phone){
-      setErrors({...errors,phone:'Phone is required.'})
-      return
-    }
-    console.log('Register user form submitted.')
-  }
-
-  console.log(errors)
 
   return (
-   <form onSubmit={onSubmit}>
+   <form onSubmit={handleSubmit(onSubmit)}>
      <div>
 
         <div className="mt-5 flex flex-col gap-1">
@@ -64,11 +31,16 @@ const SignupForm = () => {
             <label htmlFor="firstName" className="text-gray-800 font-semibold text-lg">First Name:</label>
             <LuAsterisk  size = {14} className="text-red-500"/>
           </div>
-          <input name={'firstName'} id={'firstName'} className="px-2 py-2 border border-violet-500 rounded-md  focus:outline-violet-600" placeholder="Your First Name" autoComplete="none"
-          onChange={handleChange} value={formData.firstName} 
+          <input id={'firstName'} {...register('firstName')} value={watch('firstName')} 
+          className={
+            `px-2 py-2 border rounded-md ${errors.firstName
+              ? 'border-red-500  focus:outline-red-500' 
+              :  'border-violet-400 focus:outline-violet-600'}`}
+          placeholder="Your First Name" autoComplete="none"
+           
           />
           {
-              errors.firstName && <p className="text-red-500 text-xs">{errors.firstName}</p>
+              errors.firstName && <p className="text-red-500 text-xs">{errors.firstName ? errors.firstName.message : ''}</p>
           }
         </div>
         
@@ -77,10 +49,15 @@ const SignupForm = () => {
             <label htmlFor="lastName" className="text-gray-800 font-semibold text-lg">Last Name:</label>
             <LuAsterisk  size = {14} className="text-red-500"/>
           </div>
-          <input name={'lastName'} id={'lastName'} className="px-2 py-2 border border-violet-500 rounded-md  focus:outline-violet-600" placeholder="Your Last Name" autoComplete="none"
-          onChange={handleChange} value={formData.lastName}/>
+          <input id={'lastName'} {...register('lastName')} value={watch('lastName')} 
+          className={
+            `px-2 py-2 border rounded-md ${errors.lastName
+              ? 'border-red-500  focus:outline-red-500' 
+              :  'border-violet-400 focus:outline-violet-600'}`}
+          placeholder="Your Last Name" autoComplete="none"
+          />
           {
-              errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>
+              errors.lastName && <p className="text-red-500 text-xs">{errors.lastName ? errors.lastName.message : ''}</p>
           }
         </div>
 
@@ -89,10 +66,15 @@ const SignupForm = () => {
             <label htmlFor="email" className="text-gray-800 font-semibold text-lg">Email:</label>
             <LuAsterisk  size = {14} className="text-red-500"/>
           </div>
-          <input name={'email'} id={'email'} className="px-2 py-2 border border-violet-500 rounded-md  focus:outline-violet-600" placeholder="example@gmail.com"
-          onChange={handleChange} value={formData.email}/>
+          <input id={'email'} {...register('email')} value={watch('email')} 
+          className={
+            `px-2 py-2 border rounded-md ${errors.email 
+              ? 'border-red-500  focus:outline-red-500' 
+              :  'border-violet-400 focus:outline-violet-600'}`}
+          placeholder="example@gmail.com"
+          />
           {
-              errors.email && <p className="text-red-500 text-xs">{errors.email}</p>
+              errors.email && <p className="text-red-500 text-xs">{errors.email ? errors.email.message : ''}</p>
           }
         </div>
 
@@ -101,10 +83,15 @@ const SignupForm = () => {
             <label htmlFor="password" className="text-gray-800 font-semibold text-lg">Password:</label>
             <LuAsterisk  size = {14} className="text-red-500"/>
           </div>
-          <input name={'password'} id={'password'} className="px-2 py-2 border border-violet-500 rounded-md  focus:outline-violet-600" placeholder="********" type="password" autoComplete="none"
-          onChange={handleChange} value={formData.password}/>
+          <input id={'password'} {...register('password')} value={watch('password')} 
+          className={
+           `px-2 py-2 border rounded-md ${errors.password 
+             ? 'border-red-500  focus:outline-red-500' 
+             :  'border-violet-400 focus:outline-violet-600'}`}
+          placeholder="********" type="password" autoComplete="none"
+          />
           {
-              errors.password && <p className="text-red-500 text-xs">{errors.password}</p>
+              errors.password && <p className="text-red-500 text-xs">{errors.password ? errors.password.message : ''}</p>
           }
         </div>
 
@@ -113,10 +100,15 @@ const SignupForm = () => {
             <label htmlFor="phone" className="text-gray-800 font-semibold text-lg">Phone:</label>
             <LuAsterisk  size = {14} className="text-red-500"/>
           </div>
-          <input name={'phone'} id={'phone'} className="px-2 py-2 border border-violet-500 rounded-md  focus:outline-violet-600" placeholder="#########" autoComplete="none"
-          onChange={handleChange} value={formData.phone}/>
+          <input id={'phone'} {...register('phone')} value={watch('phone')} 
+          className={
+           `px-2 py-2 border rounded-md ${errors.phone
+             ? 'border-red-500  focus:outline-red-500' 
+             :  'border-violet-400 focus:outline-violet-600'}`}
+          placeholder="#########" autoComplete="none"
+          />
           {
-              errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>
+              errors.phone && <p className="text-red-500 text-xs">{errors.phone ? errors.phone.message : ''}</p>
           }
         </div>
 
