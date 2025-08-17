@@ -1,9 +1,9 @@
 import Header from "../components/header"
 
 
-const ContactPage = () => {
+const AboutUs = () => {
   return (
-    <div className="min-h-screen border">
+    <div>
       <main>
         <Header/>
       </main>
@@ -11,4 +11,4 @@ const ContactPage = () => {
   )
 }
 
-export default ContactPage
+export default AboutUs
