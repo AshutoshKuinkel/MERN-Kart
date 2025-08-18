@@ -1,3 +1,4 @@
+import Footer from "../components/footer/footer-index"
 import Header from "../components/header"
 
 
@@ -6,6 +7,7 @@ const ContactPage = () => {
     <div className="min-h-screen border">
       <main>
         <Header/>
+        <Footer/>
       </main>
     </div>
   )

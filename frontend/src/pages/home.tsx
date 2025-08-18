@@ -1,3 +1,4 @@
+import Footer from "../components/footer/footer-index"
 import Header from "../components/header"
 
 const HomePage = () => {
@@ -7,6 +8,7 @@ const HomePage = () => {
         <Header/>
         {/* Content section */}
         <h1>HomePage</h1>
+        <Footer/>
       </div>
     </main>
    
