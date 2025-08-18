@@ -6,7 +6,7 @@ import { UsefulLinks } from "./footer-useful-links";
 
 const Footer = () => {
   return (
-    <div className="bg-violet-600 flex justify-evenly p-7 align-baseline fixed w-full bottom-0">
+    <div className="bg-violet-600 flex justify-evenly p-7 align-baseline w-full mt-6">
       {/* Useful links */}
       <UsefulLinks/>
       {/* Contact */}

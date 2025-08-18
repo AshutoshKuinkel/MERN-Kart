@@ -1,5 +1,7 @@
 import Footer from "../components/footer/footer-index"
 import Header from "../components/header"
+import FeaturedProducts from "../components/landing/featured-products"
+import Hero from "../components/landing/hero"
 
 const HomePage = () => {
   return (
@@ -7,7 +9,10 @@ const HomePage = () => {
       <div className="min-h-screen border">
         <Header/>
         {/* Content section */}
-        <h1>HomePage</h1>
+        <Hero/>
+        <div className="px-36">
+          <FeaturedProducts />
+        </div>
         <Footer/>
       </div>
     </main>
