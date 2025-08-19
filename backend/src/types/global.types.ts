@@ -16,3 +16,4 @@ export interface IJWTDecodedPayload extends IJWTPayload {
 
 export const allAdmins = [Role.ADMIN,Role.SUPER_ADMIN]
 export const onlyUser = [Role.USER]
+export const AllUsersAdmins = [...allAdmins,...onlyUser]

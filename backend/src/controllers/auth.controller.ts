@@ -87,7 +87,8 @@ export const login = async(req:Request,res:Response,next:NextFunction)=>{
     res.cookie('access_token',access_token,{
       secure:process.env.NODE_ENV === 'development' ? false:true,
       httpOnly:true,
-      maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 60 * 1000
+      maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 60 * 1000,
+      sameSite:'none'
     }).status(200).json({
       message: 'Login successful',
       status: 'success',
@@ -182,5 +183,50 @@ export const changePassword = async(req:Request,res:Response,next:NextFunction)=
     });
   } catch(err){
     next(err);
+  }
+}
+
+//logout
+
+export const logout = async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+
+    res.clearCookie('access_token',{
+        secure:process.env.NODE_ENV === 'development' ? false:true,
+        httpOnly:true,
+        sameSite:'none'
+      })
+      .status(200).json({
+        message:`Successfully Logged out.`,
+        success:true,
+        status:'success',
+        data:null
+      })
+
+  }catch(err){
+    next(err)
+  }
+}
+
+//check
+export const profile = async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    const userId = req.user._id
+
+    const user = await User.findById(userId)
+
+    if(!user){
+      throw new CustomError('User not found',400)
+    }
+
+    res.status(200).json({
+      message:`profile fetched.`,
+      success:true,
+      status:'success',
+      data:user
+    })
+
+  }catch(err){
+    next(err)
   }
 }

@@ -24,6 +24,12 @@ export const authenticate = (roles?:Role[])=>{
         throw new CustomError(`Session expired. Access denied.`,401)
       }
 
+      res.clearCookie('access_token',{
+        secure:process.env.NODE_ENV === 'development' ? false:true,
+        httpOnly:true,
+        sameSite:'none'
+      })
+
       const user = await User.findById(decodedData._id)
 
       if(!user){
