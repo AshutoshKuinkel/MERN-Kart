@@ -23,8 +23,13 @@ const LoginForm = () => {
   
 
   const onSubmit = async(data:ILoginData) =>{
-    console.log(data)
-    await login(data)
+    try{
+      console.log(data)
+      await login(data)
+    }
+    catch(err){
+      console.log(err)
+    }
   }
 
 
@@ -44,7 +49,7 @@ const LoginForm = () => {
 
           <Input
           label="Password"
-          id="email"
+          id="password"
           name="password"
           type="password"
           placeholder="********"

@@ -3,6 +3,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { signupSchema } from "../../schema/auth.schema";
 import type { ISignupData } from "../../types/auth.types";
 import Input from "../common/inputs/input";
+import { signup } from "../../api/auth.api";
 
 const SignupForm = () => {
 
@@ -18,8 +19,13 @@ const SignupForm = () => {
     mode:'all'
   })
 
-  const onSubmit = (data:ISignupData)=>{
-    console.log(data)
+  const onSubmit = async(data:ISignupData)=>{
+    try{
+      console.log(data)
+      await signup(data)
+    }catch(err){
+      console.log(err)
+    }
   }
 
   return (
