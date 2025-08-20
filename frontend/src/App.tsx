@@ -3,7 +3,7 @@ import Signup from './pages/auth/signup'
 import Login from './pages/auth/login'
 import HomePage from './pages/home'
 import ContactPage from './pages/contact'
-import PageNotFound from './pages/page-not-found'  
+import PageNotFound from './pages/page-not-found' 
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router'
 import DynamicPage from './pages/detailpage'

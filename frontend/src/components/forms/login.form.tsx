@@ -4,6 +4,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import type { ILoginData } from "../../types/auth.types";
 import { loginSchema } from "../../schema/auth.schema";
 import Input from "../common/inputs/input";
+import { login } from "../../api/auth.api";
 
 
 const LoginForm = () => {
@@ -21,8 +22,9 @@ const LoginForm = () => {
   // console.log(watch('password'))
   
 
-  const onSubmit = (data:ILoginData) =>{
+  const onSubmit = async(data:ILoginData) =>{
     console.log(data)
+    await login(data)
   }
 
 
