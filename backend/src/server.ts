@@ -15,6 +15,8 @@ import productRoutes from './routes/product.routes'
 import WishListRoutes  from './routes/wishlist.routes' ;
 import cartRoutes from './routes/cart.routes';
 import orderRoutes from './routes/order.routes'
+import cors from 'cors';
+import helmet from 'helmet';
 
 dotenv.config();
 const app = express();
@@ -24,6 +26,8 @@ const DB_URI = process.env.DB_URI ?? '';
 ConnectDatabase(DB_URI);
 
 //using middlewares
+app.use(helmet())
+app.use(cors)
 app.use(express.json());
 app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser())

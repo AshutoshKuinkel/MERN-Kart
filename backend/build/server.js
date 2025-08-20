@@ -19,12 +19,16 @@ const product_routes_1 = __importDefault(require("./routes/product.routes"));
 const wishlist_routes_1 = __importDefault(require("./routes/wishlist.routes"));
 const cart_routes_1 = __importDefault(require("./routes/cart.routes"));
 const order_routes_1 = __importDefault(require("./routes/order.routes"));
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const DB_URI = (_a = process.env.DB_URI) !== null && _a !== void 0 ? _a : '';
 (0, db_config_1.ConnectDatabase)(DB_URI);
 //using middlewares
+app.use((0, helmet_1.default)());
+app.use(cors_1.default);
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
 app.use((0, cookie_parser_1.default)());

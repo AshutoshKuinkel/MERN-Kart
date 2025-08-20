@@ -8,7 +8,7 @@ export const uploader = ()=>{
 
   const fileSize = 5 * 1024 * 1024
 
-  const allowedExts = ['jpg','png','webp','gif','svg','jpeg']
+  const allowedExts = ['jpg','png','webp','gif','svg','jpeg','pdf']
 
   const myStorage = multer.diskStorage({
     destination:(req,file,cb)=>{
