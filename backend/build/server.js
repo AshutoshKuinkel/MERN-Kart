@@ -52,7 +52,7 @@ app.all('/{*all}', (req, res) => {
     const message = `Cannot ${req.method} @ ${req.originalUrl}`;
     throw new error_handler_middleware_2.default(message, 404);
 });
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 //using error handler middleware 
