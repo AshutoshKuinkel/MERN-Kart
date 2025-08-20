@@ -58,7 +58,7 @@ app.all('/{*all}',(req: Request, res: Response) => {
   throw new CustomError(message, 404);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT as any,'0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
