@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import express, {Request, Response} from 'express';
-import dotenv from 'dotenv';
 import mongoose, { connect } from 'mongoose';
 import { ConnectDatabase } from './config/db.config';
 import cookieParser from 'cookie-parser';
@@ -18,7 +18,6 @@ import orderRoutes from './routes/order.routes'
 import cors from 'cors';
 import helmet from 'helmet';
 
-dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 const DB_URI = process.env.DB_URI ?? '';
@@ -27,7 +26,7 @@ ConnectDatabase(DB_URI);
 
 //using middlewares
 app.use(helmet())
-app.use(cors)
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser())
