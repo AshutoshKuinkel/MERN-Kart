@@ -16,7 +16,7 @@ export const login = async(data:ILoginData)=>{
 
 export const signup = async(data:ISignupData)=>{
   try{
-    const response = await axios.post('https://mern-kart-xg36.onrender.com/api/auth/login',data)
+    const response = await axios.post('https://mern-kart-xg36.onrender.com/api/auth/register',data)
     console.log(response)
     return response.data
   }catch(err:any){

@@ -4,8 +4,13 @@ import { signupSchema } from "../../schema/auth.schema";
 import type { ISignupData } from "../../types/auth.types";
 import Input from "../common/inputs/input";
 import { signup } from "../../api/auth.api";
+import { useMutation} from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
+
+  const navigate = useNavigate()
 
   const methods = useForm({
     defaultValues:{
@@ -19,14 +24,24 @@ const SignupForm = () => {
     mode:'all'
   })
 
+  const {mutate,isPending} = useMutation({
+    mutationFn:signup,
+    onSuccess: (response)=>{
+      console.log(response)
+      toast.success(response?.message ?? 'Successfully Signed Up.')
+      navigate('/login')
+    },
+    onError: (error)=>{
+      console.log(error)
+      toast.error(error.message ? error.message : 'Signup Failed' )
+    },
+
+    mutationKey: ['Signup_key']
+  })
+
   const onSubmit = async(data:ISignupData)=>{
-    try{
-      console.log(data)
-      await signup(data)
-    }catch(err){
-      console.log(err)
-    }
-  }
+    mutate(data)
+  } 
 
   return (
     <FormProvider {...methods}>
@@ -77,7 +92,7 @@ const SignupForm = () => {
         </div>
 
         <div className="mt-6 w-full">
-          <button className="bg-violet-600 mt-5 py-2 rounded-md font-bold text-white cursor-pointer w-full transition-all duration-300 hover:bg-violet-800">Register</button>
+          <button disabled={isPending} className="bg-violet-600 mt-5 py-2 rounded-md font-bold text-white cursor-pointer w-full transition-all duration-300 hover:bg-violet-800  disabled:bg-violet-500 disabled:cursor-not-allowed">Register</button>
         </div>
 
       </div>

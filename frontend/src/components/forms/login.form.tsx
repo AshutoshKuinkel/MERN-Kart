@@ -1,62 +1,70 @@
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import type { ILoginData } from "../../types/auth.types";
 import { loginSchema } from "../../schema/auth.schema";
 import Input from "../common/inputs/input";
 import { login } from "../../api/auth.api";
-
+import { useMutation } from "@tanstack/react-query";
+import toast from 'react-hot-toast'
+import { useNavigate } from "react-router";
 
 const LoginForm = () => {
 
+  const navigate = useNavigate()
+
   const methods = useForm({
-    defaultValues:{
-    email:'',
-    password:''
-  },
-  resolver:yupResolver(loginSchema),
-  mode:'all'
-  })
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(loginSchema),
+    mode: "all",
+  });
 
-  // console.log(watch('email'))
-  // console.log(watch('password'))
-  
+  const { mutate, isPending} = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      console.log(response);
+      toast.success(response?.message ?? 'Login Success.')
+      localStorage.setItem('user',JSON.stringify(response.data.data))
+      navigate('/')
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.message ?? 'Login Failed.')
+    },
+    mutationKey: ["login_mutation"],
+  });
 
-  const onSubmit = async(data:ILoginData) =>{
-    try{
-      console.log(data)
-      await login(data)
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
-
+  const onSubmit = (data: ILoginData) => {
+    mutate(data);
+  };
 
   return (
-  <div>
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="mt-5 flex flex-col gap-6">
-          {/* input fields */}
-          <Input
-          label="Email"
-          id="email"
-          name="email"
-          placeholder="example@gmail.com"
-          required
-          />
+    <div>
+      {/* {error && <p>{error.message}</p>} */}
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <div className="mt-5 flex flex-col gap-6">
+            {/* input fields */}
+            <Input
+              label="Email"
+              id="email"
+              name="email"
+              placeholder="example@gmail.com"
+              required
+            />
 
-          <Input
-          label="Password"
-          id="password"
-          name="password"
-          type="password"
-          placeholder="********"
-          required
-          />
+            <Input
+              label="Password"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="********"
+              required
+            />
 
-          {/* <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
             <div className="flex">
               <label htmlFor="password" className="text-gray-800 font-semibold text-lg">
               Password
@@ -80,17 +88,20 @@ const LoginForm = () => {
             }
           </div> */}
 
-          <div className="w-full mt-6">
-            <button type="submit" className=" cursor-pointer w-full bg-violet-600 py-3 rounded-md text-white font-bold text-large transition-all duration-300 hover:bg-violet-800">
-              Sign In
-            </button>
+            <div className="w-full mt-6">
+              <button
+                type="submit"
+                disabled={isPending}
+                className=" cursor-pointer w-full bg-violet-600 py-3 rounded-md text-white font-bold text-large transition-all duration-300 hover:bg-violet-800  disabled:bg-violet-500 disabled:cursor-not-allowed"
+              >
+                Sign In
+              </button>
+            </div>
           </div>
+        </form>
+      </FormProvider>
+    </div>
+  );
+};
 
-        </div>
-      </form>
-    </FormProvider>
-  </div>
-  )
-}
-
-export default LoginForm
+export default LoginForm;

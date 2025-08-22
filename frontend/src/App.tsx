@@ -4,6 +4,7 @@ import Login from './pages/auth/login'
 import HomePage from './pages/home'
 import ContactPage from './pages/contact'
 import PageNotFound from './pages/page-not-found' 
+import {Toaster} from 'react-hot-toast'
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router'
 import DynamicPage from './pages/detailpage'
@@ -26,7 +27,7 @@ const App = () => {
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
       </Router>
-
+      <Toaster reverseOrder={true}/>
     </main>
   )
 }
