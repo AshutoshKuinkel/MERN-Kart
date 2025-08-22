@@ -10,6 +10,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router'
 import DynamicPage from './pages/detailpage'
 import ProductPage from './pages/product'
 import AboutUs from './pages/About-us'
+import ClientLayout from './layouts/client.layout'
 
 const App = () => {
   return (
@@ -17,13 +18,16 @@ const App = () => {
       
       <Router>
         <Routes>
-          <Route path='/' element={<HomePage/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/signup' element={<Signup/>}/>
-          <Route path='/contact-us' element={<ContactPage/>}/>
-          <Route path='/product/:id' element={<DynamicPage/>}/>
-          <Route path='/products' element={<ProductPage/>}/>
-          <Route path='/about-us' element={<AboutUs/>}/>
+
+          <Route path={'/'} element={<ClientLayout/>}>
+            <Route path='/' element={<HomePage/>}/>
+            <Route path='/contact-us' element={<ContactPage/>}/>
+            <Route path='/product/:id' element={<DynamicPage/>}/>
+            <Route path='/products' element={<ProductPage/>}/>
+            <Route path='/about-us' element={<AboutUs/>}/>
+          </Route>
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
       </Router>

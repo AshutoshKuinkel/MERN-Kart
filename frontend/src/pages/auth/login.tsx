@@ -1,4 +1,5 @@
 import LoginForm from "../../components/forms/login.form"
+import { Link } from "react-router"
 
 
 const Login = () => {
@@ -13,7 +14,10 @@ const Login = () => {
         {/* link to signup */}
         <div className="py-5">
           <p className="text-center ">
-            Don't have an account? <span className="text-violet-700">Sign Up?</span>
+            Don't have an account? 
+            <Link to={'/signup'}>
+              <span className="text-violet-700">Sign Up?</span>
+            </Link>
           </p>
         </div>
 

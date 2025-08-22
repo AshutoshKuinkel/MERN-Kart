@@ -1,10 +1,13 @@
-import axios from 'axios';
+
 import type { ILoginData, ISignupData } from '../types/auth.types';
+import api from './index'
+
+const API_URL = import.meta.env.VITE_API_BASE_URL
 
 export const login = async(data:ILoginData)=>{
   try{
-
-    const response = await axios.post('https://mern-kart-xg36.onrender.com/api/auth/login',data)
+    console.log(data,API_URL)
+    const response = await api.post(`/auth/login`,data)
     console.log(response)
     return response.data
 
@@ -16,7 +19,19 @@ export const login = async(data:ILoginData)=>{
 
 export const signup = async(data:ISignupData)=>{
   try{
-    const response = await axios.post('https://mern-kart-xg36.onrender.com/api/auth/register',data)
+    const response = await api.post(`/auth/register`,data)
+    console.log(response)
+    return response.data
+  }catch(err:any){
+    console.log(err)
+    throw err.response.data
+  }
+}
+
+
+export const logout = async()=>{
+  try{
+    const response = await api.post('/auth/logout')
     console.log(response)
     return response.data
   }catch(err:any){
