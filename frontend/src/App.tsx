@@ -14,7 +14,7 @@ import ClientLayout from './layouts/client.layout'
 
 const App = () => {
   return (
-    <main className='h-full'>
+    <main className='h-full tracking-wider'>
       
       <Router>
         <Routes>
