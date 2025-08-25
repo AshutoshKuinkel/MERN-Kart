@@ -1,10 +1,10 @@
 import type { IUser } from "./auth.types"
 import type { IBrandResponse } from "./brand.types"
 import type { ICategoryResponse } from "./category.types"
-import type { IImage } from "./global.types"
+import type { IImage, IResponse } from "./global.types"
 
 
-export interface IProduct{
+export interface IProduct extends IResponse{
   name:string,
   coverImage:IImage,
   images?:IImage[],
