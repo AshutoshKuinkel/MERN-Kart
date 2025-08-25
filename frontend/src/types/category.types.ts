@@ -1,7 +1,6 @@
-export interface ICategoryResponse{
-  _id:string,
+import type { IResponse } from "./global.types";
+
+export interface ICategoryResponse extends IResponse{
   name:string,
   description?:string,
-  createdAt:string,
-  updatedAt?:string
 }
