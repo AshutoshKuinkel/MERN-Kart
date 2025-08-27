@@ -4,10 +4,13 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdLogIn } from "react-icons/io";
 import { logout } from "../../api/auth.api";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../context/auth.context";
 
 export const IconSection = () =>{
 
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : null;
+  // const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : null;
+  const {user,setToken} = useAuth()
+  console.log(user)
 
   const get_user_full_name = (user:any) =>{
     return `${user.firstName} ${user.lastName}`
