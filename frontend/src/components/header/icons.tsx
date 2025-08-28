@@ -3,13 +3,15 @@ import { LiaCartArrowDownSolid } from "react-icons/lia";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdLogIn } from "react-icons/io";
 import { logout } from "../../api/auth.api";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../context/auth.context";
+import toast from "react-hot-toast";
 
 export const IconSection = () =>{
 
   // const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : null;
-  const {user,setToken} = useAuth()
+  const {user} = useAuth()
+
   console.log(user)
 
   const get_user_full_name = (user:any) =>{
@@ -21,7 +23,11 @@ export const IconSection = () =>{
     try {
       await logout(); // Call the logout API
       localStorage.removeItem('user'); // Remove user from localStorage
-      window.location.reload(); // Reload the page to reflect the changes
+      localStorage.removeItem('token')
+      toast.success('Logged out')
+      setTimeout(() => {
+      window.location.reload(); // Reload the page after a small delay
+    }, 1000); // Reload the page to reflect the changes
     } catch (error) {
       console.log('Logout error:', error);
     }
@@ -31,8 +37,8 @@ const navigate = useNavigate()
 
   return(
       <div className="flex gap-3 items-center">
-        <CiHeart size={30} className="text-violet-600"/>
-        <LiaCartArrowDownSolid size={28} className="text-violet-600"/>
+        <Link to={'/wishlist'}><CiHeart size={30} className="text-violet-600"/></Link>
+        <Link to={'/cart'}><LiaCartArrowDownSolid size={28} className="text-violet-600"/></Link>
         {user ? <div className="flex items-center gap-2">
           <IoPersonCircleOutline size={28} className="text-violet-600"/>
           <div className="mt-4">

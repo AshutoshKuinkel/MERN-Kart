@@ -16,11 +16,17 @@ const FeaturedProducts = () => {
   return (
     <div className='min-h-[500px]'>
       <ComponentTitle title='Featured Products' sub_title='Limited Stock- Shop Featured Favorites Today' link='#' />
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-6'>
+      {
+        isLoading && <div className='min-h-40 flex justify-center items-center'
+        >
+          <p className='text-xl text-violet-700'>Loading...</p>
+        </div>
+      }
+      { !isLoading && <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-6'>
         {data?.data.map((product:IProduct)=>(
           <ProductCard product={product}/>
         ))}
-      </div>
+      </div>}
 
     </div>
   )

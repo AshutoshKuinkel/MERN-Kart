@@ -32,7 +32,6 @@ export const signup = async(data:ISignupData)=>{
 export const logout = async()=>{
   try{
     const response = await api.post('/auth/logout')
-    console.log(response)
     return response.data
   }catch(err:any){
     console.log(err)

@@ -32,7 +32,7 @@ const LoginForm = () => {
       localStorage.setItem('token',response.data.access_token)
       setUser(response.data.data)
       setToken(response.data.access_token)
-      navigate('/')
+      navigate('/',{replace:true})
     },
     onError: (error) => {
       console.log(error);

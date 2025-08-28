@@ -11,6 +11,7 @@ import DynamicPage from './pages/detailpage'
 import ProductPage from './pages/product'
 import AboutUs from './pages/About-us'
 import ClientLayout from './layouts/client.layout'
+import Wishlist from './pages/wishlist'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path='/product/:id' element={<DynamicPage/>}/>
             <Route path='/products' element={<ProductPage/>}/>
             <Route path='/about-us' element={<AboutUs/>}/>
+            <Route path='/wishlist' element={<Wishlist/>}/>
           </Route>
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
