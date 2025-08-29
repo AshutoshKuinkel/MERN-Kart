@@ -1,7 +1,9 @@
 import ComponentTitle from "../components/common/title-component"
+import withAuth from "../components/hoc/with-auth.hoc"
+import { Role } from "../types/enum"
 
 
-const Wishlist = () => {
+const WishlistPage = () => {
   return (
     <div className="w-full h-full px-36 mt-3">
       <ComponentTitle
@@ -17,4 +19,4 @@ const Wishlist = () => {
   )
 }
 
-export default Wishlist
+export default withAuth(WishlistPage,[Role.USER])

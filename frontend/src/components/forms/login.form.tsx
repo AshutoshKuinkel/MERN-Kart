@@ -6,13 +6,17 @@ import Input from "../common/inputs/input";
 import { login } from "../../api/auth.api";
 import { useMutation } from "@tanstack/react-query";
 import toast from 'react-hot-toast'
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/auth.context";
 
 const LoginForm = () => {
-  const {setUser,setToken} = useAuth()
+  const {setUser} = useAuth()
 
   const navigate = useNavigate()
+
+  const location=useLocation()
+
+  const  navigate_to = location.state?.from ?? '/'
 
   const methods = useForm({
     defaultValues: {
@@ -28,11 +32,10 @@ const LoginForm = () => {
     onSuccess: (response) => {
       console.log(response);
       toast.success(response?.message ?? 'Login Success.')
-      localStorage.setItem('user',JSON.stringify(response.data.data))
-      localStorage.setItem('token',response.data.access_token)
+      // localStorage.setItem('user',JSON.stringify(response.data.data))
+      // localStorage.setItem('token',response.data.access_token)
       setUser(response.data.data)
-      setToken(response.data.access_token)
-      navigate('/',{replace:true})
+      navigate(navigate_to,{replace:true})
     },
     onError: (error) => {
       console.log(error);

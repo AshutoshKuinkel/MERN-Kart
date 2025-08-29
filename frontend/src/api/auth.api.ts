@@ -38,3 +38,14 @@ export const logout = async()=>{
     throw err.response.data
   }
 }
+
+export const get_profile = async()=>{
+  try{
+    const response = await api.get('/auth/me')
+    return response.data
+  }
+  catch(err:any){
+    console.log(err)
+    throw err.response.data
+  }
+}
