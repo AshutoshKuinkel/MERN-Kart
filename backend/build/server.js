@@ -28,7 +28,7 @@ const DB_URI = (_a = process.env.DB_URI) !== null && _a !== void 0 ? _a : '';
 //using middlewares
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
-    origin: process.env.FRONT_END_URL || 'http://localhost:5173/',
+    origin: process.env.FRONT_END_URL || 'http://localhost:5173',
     credentials: true
 }));
 app.use(express_1.default.json());
