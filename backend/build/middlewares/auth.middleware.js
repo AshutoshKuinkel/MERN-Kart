@@ -28,13 +28,13 @@ const authenticate = (roles) => {
             //verify token
             const decodedData = (0, jwt_utils_1.verifyToken)(access_token);
             if (Date.now() > decodedData.exp * 1000) {
+                res.clearCookie("access_token", {
+                    secure: process.env.NODE_ENV === "development" ? false : true,
+                    httpOnly: true,
+                    sameSite: "none",
+                });
                 throw new error_handler_middleware_1.default(`Session expired. Access denied.`, 401);
             }
-            res.clearCookie('access_token', {
-                secure: process.env.NODE_ENV === 'development' ? false : true,
-                httpOnly: true,
-                sameSite: 'none'
-            });
             const user = yield user_model_1.default.findById(decodedData._id);
             if (!user) {
                 throw new error_handler_middleware_1.default(`Unauthorised. Access denied.`, 401);
@@ -42,14 +42,14 @@ const authenticate = (roles) => {
             console.log(decodedData);
             //roles.includes(userRole)
             if (roles && !roles.includes(decodedData.role)) {
-                throw new error_handler_middleware_1.default('Unauthorised. Access denied.', 401);
+                throw new error_handler_middleware_1.default("Unauthorised. Access denied.", 401);
             }
             req.user = {
                 _id: decodedData._id,
                 email: decodedData.email,
                 role: decodedData.role,
                 firstName: decodedData.firstName,
-                lastName: decodedData.lastName
+                lastName: decodedData.lastName,
             };
             next();
         }
