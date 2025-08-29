@@ -26,7 +26,10 @@ ConnectDatabase(DB_URI);
 
 //using middlewares
 app.use(helmet())
-app.use(cors())
+app.use(cors({
+  origin:process.env.FRONT_END_URL || 'http://localhost:5173/',
+  credentials:true
+}))
 app.use(express.json());
 app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser())
