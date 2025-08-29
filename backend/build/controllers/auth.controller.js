@@ -91,7 +91,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         res.cookie('access_token', access_token, {
             secure: process.env.NODE_ENV === 'development' ? false : true,
             httpOnly: true,
-            maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 60 * 1000,
+            maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 1000,
             sameSite: 'none'
         }).status(200).json({
             message: 'Login successful',
