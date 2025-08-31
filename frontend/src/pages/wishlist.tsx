@@ -1,5 +1,6 @@
 import ComponentTitle from "../components/common/title-component"
 import withAuth from "../components/hoc/with-auth.hoc"
+import Wishlist from "../components/wishlist/list"
 import { Role } from "../types/enum"
 
 
@@ -13,7 +14,7 @@ const WishlistPage = () => {
 
       {/* product list */}
       <div>
-
+        <Wishlist/>
       </div>
     </div>
   )

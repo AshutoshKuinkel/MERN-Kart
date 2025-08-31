@@ -24,7 +24,7 @@ const FeaturedProducts = () => {
       }
       { !isLoading && <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-6'>
         {data?.data.map((product:IProduct)=>(
-          <ProductCard product={product}/>
+          <ProductCard product={product} key={product._id}/>
         ))}
       </div>}
 

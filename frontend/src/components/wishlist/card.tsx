@@ -1,6 +1,6 @@
 
 import type { IProduct } from "../../types/product.types";
-
+import photo from '../../assets/photo-1505740420928-5e560c06d30e.jpg'
 
 interface IProps {
   product: IProduct;
@@ -13,7 +13,7 @@ const WishlistCard: React.FC<IProps> = ({product}) => {
         <div className="max-w-[275px,100%] p-8">
           <img
             className=" rounded-lg cursor-pointer hover:scale-122 transition-all duration-500 hover:grayscale-25"
-            src={product.coverImage.path}
+            src={photo}
             alt=""
           />
         </div>
