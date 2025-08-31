@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/registerProductToWishlist", authenticate(onlyUser),registerProductToWishlist);
 router.delete("/removeProductFromWishlist/:id",authenticate(onlyUser), removeProductFromWishlist);
-router.get("/wishlist",authenticate(onlyUser), getAllWishlistItems);
+router.get("/",authenticate(onlyUser), getAllWishlistItems);
 router.get("/checkIfProductInWishlist/:productId",authenticate(onlyUser), checkIfProductInWishlist);
 router.delete("/clearWishList",authenticate(onlyUser),clearWishlist)
 
