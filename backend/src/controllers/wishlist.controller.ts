@@ -9,7 +9,7 @@ import { Wishlist } from "../models/wishlist.model";
 
 export const registerProductToWishlist = async(req:Request,res:Response,next:NextFunction)=>{
   try{
-    const { productId } = req.body;
+    const productId = req.body.id;
     const userId = req.user._id;
 
     if (!productId) {

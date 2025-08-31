@@ -17,7 +17,7 @@ const error_handler_middleware_1 = __importDefault(require("../middlewares/error
 const wishlist_model_1 = require("../models/wishlist.model");
 const registerProductToWishlist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { productId } = req.body;
+        const productId = req.body.id;
         const userId = req.user._id;
         if (!productId) {
             throw new error_handler_middleware_1.default("Product ID is required", 400);
