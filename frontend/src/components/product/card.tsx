@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { IProduct } from "../../types/product.types";
 import { addToWishlist } from "../../api/wishlist.api";
 import toast from "react-hot-toast";
+import { Link } from "react-router";
 
 interface IProps {
   product: IProduct;
@@ -53,9 +54,12 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
       {/* button */}
       <div>
         {/* view details */}
+        <Link to={`/product/${product?._id}?name=${product?.name}`}>
         <button className=" px-7 py-2 font-bold text-white bg-gray-700 rounded-md cursor-pointer hover:grayscale-50 hover:translate-y-1 transition-all duration-300">
           View Details
         </button>
+        </Link>
+        
         {/* add to wishlist */}
         <button 
         onClick={addToList}

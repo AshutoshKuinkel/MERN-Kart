@@ -7,11 +7,11 @@ import PageNotFound from './pages/page-not-found'
 import {Toaster} from 'react-hot-toast'
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router'
-import DynamicPage from './pages/detailpage'
 import ProductPage from './pages/product'
 import AboutUs from './pages/About-us'
 import ClientLayout from './layouts/client.layout'
 import Wishlist from './pages/wishlist'
+import ProductDetailPage from './pages/detailpage'
 
 const App = () => {
   return (
@@ -25,7 +25,7 @@ const App = () => {
           <Route path={'/'} element={<ClientLayout/>}>
             <Route path='/' element={<HomePage/>}/>
             <Route path='/contact-us' element={<ContactPage/>}/>
-            <Route path='/product/:id' element={<DynamicPage/>}/>
+            <Route path='/product/:id' element={<ProductDetailPage/>}/>
             <Route path='/products' element={<ProductPage/>}/>
             <Route path='/about-us' element={<AboutUs/>}/>
             <Route path='/wishlist' element={<Wishlist/>}/>

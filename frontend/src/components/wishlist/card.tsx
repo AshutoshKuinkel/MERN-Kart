@@ -1,19 +1,21 @@
 
 import type { IProduct } from "../../types/product.types";
-import photo from '../../assets/photo-1505740420928-5e560c06d30e.jpg'
 
 interface IProps {
-  product: IProduct;
+  item:{
+    _id:string,
+    product: IProduct;
+  }
 }
 
-const WishlistCard: React.FC<IProps> = ({product}) => {
+const WishlistCard: React.FC<IProps> = ({item}) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="border border-gray-300 rounded-md">
-        <div className="max-w-[275px,100%] p-8">
+      <div className="border border-gray-300 rounded-md max-w-[275px]">
+        <div className="max-w-[275px] p-8">
           <img
-            className=" rounded-lg cursor-pointer hover:scale-122 transition-all duration-500 hover:grayscale-25"
-            src={photo}
+            className=" rounded-lg cursor-pointer hover:scale-122 transition-all duration-500 hover:grayscale-25 max-w-full max-h-[275px]"
+            src={item.product.coverImage.path}
             alt=""
           />
         </div>
@@ -21,17 +23,17 @@ const WishlistCard: React.FC<IProps> = ({product}) => {
       {/* image section */}
 
       {/* name */}
-      <h2 className="text-violet-700 font-bold text-2xl">{product.name}</h2>
+      <h2 className="text-violet-700 font-bold text-2xl">{item.product.name}</h2>
 
       {/* description */}
       <p className="line-clamp-1 text-gray-500">
-        {product.description
-          ? product.description
+        {item.product.description
+          ? item.product.description
           : "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Natus ipsa cumque nobis aliquid excepturi quae magni assumenda quasi, mollitia, expedita, voluptates possimus aspernatur eum fuga ad numquam sunt hic optio."}
       </p>
 
       {/* price */}
-      <p className="font-bold text-lg text-gray-800">NPR. {product.price}</p>
+      <p className="font-bold text-lg text-gray-800">NPR. {item.product.price}</p>
 
       {/* button */}
       <div>

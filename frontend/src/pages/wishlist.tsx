@@ -13,7 +13,7 @@ const WishlistPage = () => {
       />
 
       {/* product list */}
-      <div>
+      <div className="flex w-full">
         <Wishlist/>
       </div>
     </div>
