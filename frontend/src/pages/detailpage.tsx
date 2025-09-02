@@ -2,6 +2,7 @@ import { useParams } from "react-router"
 import ComponentTitle from "../components/common/title-component"
 import { useQuery } from "@tanstack/react-query"
 import { getById } from "../api/product.api"
+import DetailSection from "../components/product/detail"
 
 const ProductDetailPage = () => {
 
@@ -27,6 +28,9 @@ const ProductDetailPage = () => {
         title={data?.data.name}
         sub_title={data?.data.description}
       />
+      {/* Detail Section */}
+
+      <DetailSection product={data?.data} />
     </div>
   )
 }

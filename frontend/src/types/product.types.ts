@@ -7,7 +7,7 @@ import type { IImage, IResponse } from "./global.types"
 export interface IProduct extends IResponse{
   name:string,
   coverImage:IImage,
-  images?:IImage[],
+  images?:string[],
   brand:IBrandResponse,
   category:ICategoryResponse,
   createdBy:IUser,
