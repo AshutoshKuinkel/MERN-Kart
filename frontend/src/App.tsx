@@ -12,6 +12,7 @@ import AboutUs from './pages/About-us'
 import ClientLayout from './layouts/client.layout'
 import Wishlist from './pages/wishlist'
 import ProductDetailPage from './pages/detailpage'
+import CartPage from './pages/cart'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path='/contact-us' element={<ContactPage/>}/>
             <Route path='/product/:id' element={<ProductDetailPage/>}/>
             <Route path='/products' element={<ProductPage/>}/>
+            <Route path='/cart' element={<CartPage/>}/>
             <Route path='/about-us' element={<AboutUs/>}/>
             <Route path='/wishlist' element={<Wishlist/>}/>
           </Route>

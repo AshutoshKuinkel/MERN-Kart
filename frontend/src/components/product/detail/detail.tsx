@@ -3,11 +3,48 @@ import type { IProduct } from "../../../types/product.types";
 import { TiStarFullOutline } from "react-icons/ti";
 import { TbCurrencyRupeeNepalese } from "react-icons/tb";
 import { CiShoppingTag } from "react-icons/ci";
+import { QuantityInput } from "../../common/inputs/quantity-input";
+import { useMutation } from "@tanstack/react-query";
+import { addToCart } from "../../../api/cart.api";
+import toast from "react-hot-toast";
+import { addToWishlist } from "../../../api/wishlist.api";
 
 interface IProps {
   product: IProduct;
 }
 const Detail: React.FC<IProps> = ({ product }) => {
+  const [quantity,setQuantity] = React.useState(1)
+
+  const {mutate:cart_mutate, isPending: is_cart_pending} = useMutation({
+    mutationFn:addToCart,
+    onSuccess:(response)=>{
+      toast.success(response.message ?? 'Product Added to Cart')
+    },
+    onError:(err)=>{
+      toast.error(err.message ?? 'Something went wrong')
+    }
+  })
+
+  //add to wishlist mutation:
+  const {mutate:wishlist_mutate, isPending: is_wishlist_pending} = useMutation({
+    mutationFn:addToWishlist,
+    onSuccess:(response)=>{
+      toast.success(response.message ?? 'Product Added to Wishlist')
+    },
+    onError:(err)=>{
+      toast.error(err.message ?? 'Something went wrong')
+    }
+  })
+
+  const handle_wishlist_click = ()=>{
+    wishlist_mutate(product._id)
+  }
+
+  //mutate cart
+  const handle_cart_click = ()=>{
+    cart_mutate({quantity,productId:product._id})
+  }
+
   return (
     <div className="px-5">
       <div className="flex items-center justify-between">
@@ -54,25 +91,29 @@ const Detail: React.FC<IProps> = ({ product }) => {
       </div>
 
       {/* quantitiy input */}
-      <div className="mt-3 space-y-3">
-        <label htmlFor="quantity" className="text-md font-semibold">Quantity</label>
-        <div className="border border-violet-300 w-fit rounded-md">
-          <button className="w-12aspect-square text-xl cursor-pointer">-</button>
-          <input id='quantity' className="h-12 px-2 text-center outline-none" defaultValue={1} min={1} type='number'/>
-          <button className="w-fit aspect-square text-xl cursor-pointer">+</button>
-        </div>
-      </div>
+      <QuantityInput quantity={quantity} setQuantity={setQuantity}/>
+
 
       {/* Buttons */}
       <div className="flex w-full gap-4 mt-6">
         {/* add to cart */}
-        <button className="w-full bg-gray-800 text-white text-lg font-bold p-3 rounded-lg cursor-pointer">Add to Cart</button>
+        <button 
+          onClick={handle_cart_click}
+          disabled={is_cart_pending}
+          className="disabled:bg-gray-600 disabled:cursor-not-allowed w-full bg-gray-800 text-white text-lg font-bold p-3 rounded-lg cursor-pointer">
+          {is_cart_pending ? "Adding..." : 'Add to Cart'}
+          </button>
 
         {/* add to wishlist */}
-        <button className="w-full bg-[#f8f8f8] text-gray-900 text-lg font-bold p-3 rounded-lg cursor-pointer border border-gray-500">Add to Wishlist</button>
+        <button 
+        onClick={handle_wishlist_click}
+        className="w-full bg-[#f8f8f8] text-gray-900 text-lg font-bold p-3 rounded-lg cursor-pointer border border-gray-500">
+          {is_wishlist_pending ? "Adding..." : 'Add to Wishlist'}
+        </button>
       </div>
     </div>
   );
 };
 
 export default Detail;
+
