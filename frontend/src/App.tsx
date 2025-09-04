@@ -13,6 +13,9 @@ import ClientLayout from './layouts/client.layout'
 import Wishlist from './pages/wishlist'
 import ProductDetailPage from './pages/detailpage'
 import CartPage from './pages/cart'
+import Dashboard from './pages/admin/dashboard'
+import UserPage from './pages/admin/user'
+import OrderPage from './pages/admin/order'
 
 const App = () => {
   return (
@@ -33,6 +36,12 @@ const App = () => {
             <Route path='/wishlist' element={<Wishlist/>}/>
           </Route>
           <Route path='*' element={<PageNotFound/>}/>
+
+          {/* admin routes */}
+          <Route path='/admin' element={<Dashboard/>}/>
+          <Route path='/admin/users' element={<UserPage/>}/>
+          <Route path='/admin/orders' element={<OrderPage/>}/>
+
         </Routes>
       </Router>
       <Toaster reverseOrder={true}/>
