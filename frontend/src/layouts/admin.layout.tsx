@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
 import Sidebar from "../components/admin/sidebar";
+import withAuth from "../components/hoc/with-auth.hoc";
+import { Role } from "../types/enum";
 
 const AdminLayout = () => {
   return (
@@ -23,4 +25,5 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+const Component = withAuth(AdminLayout,[Role.ADMIN,Role.SUPER_ADMIN])
+export default Component

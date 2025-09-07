@@ -1,4 +1,4 @@
-import React from 'react'
+import CategoryForm from '../../../components/admin/category/form'
 import PageHeader from '../../../components/admin/header/page-header'
 
 const CreateCategory = () => {
@@ -12,8 +12,9 @@ const CreateCategory = () => {
       link_to='/admin/category'
       />
 
-      <div className='p-3 mt-5 min-h-[500px] shadow rounded-md'>
-        <h1 className='font-bold text-lg text-violet-900 text-center'>Category Form</h1>
+      <div className='p-3 mt-5 min-h-[500px] shadow rounded-md border border-gray-300'>
+        <h1 className='font-bold text-lg text-violet-900 text-center mb-10 '>Category Form</h1>
+        <CategoryForm/>
       </div>
     </main>
   )
