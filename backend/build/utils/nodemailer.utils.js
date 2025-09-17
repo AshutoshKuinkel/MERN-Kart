@@ -16,6 +16,10 @@ exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const error_handler_middleware_1 = __importDefault(require("../middlewares/error-handler.middleware"));
 //creating transporter:
+console.log(process.env.SMTP_HOST);
+console.log(process.env.SMTP_USER);
+console.log(process.env.SMTP_SERVICE);
+console.log(process.env.SMTP_PORT);
 const transporter = nodemailer_1.default.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
@@ -23,31 +27,40 @@ const transporter = nodemailer_1.default.createTransport({
     service: process.env.SMTP_SERVICE,
     auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD
+        pass: process.env.SMTP_PASSWORD,
     },
 });
-const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, html, cc = null, bcc = null, attachments = null }) {
+// Callback style
+transporter.verify((error, success) => {
+    if (error) {
+        console.error(error);
+    }
+    else {
+        console.log("Server is ready to take our messages");
+    }
+});
+const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, html, cc = null, bcc = null, attachments = null, }) {
     try {
         let message = {
             from: `MERN Kart <${process.env.SMTP_USER}>`,
             to,
             subject,
-            html
+            html,
         };
         if (cc) {
-            message['cc'] = cc;
+            message["cc"] = cc;
         }
         if (bcc) {
-            message['bcc'] = bcc;
+            message["bcc"] = bcc;
         }
         if (attachments) {
-            message['attachments'] = attachments;
+            message["attachments"] = attachments;
         }
         yield transporter.sendMail(message);
     }
     catch (err) {
         console.log(err);
-        throw new error_handler_middleware_1.default('Error sending email', 500);
+        throw new error_handler_middleware_1.default("Error sending email", 500);
     }
 });
 exports.sendEmail = sendEmail;
