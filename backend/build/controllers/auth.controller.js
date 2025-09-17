@@ -29,25 +29,31 @@ const error_handler_middleware_1 = __importDefault(require("../middlewares/error
 const bcrypt_utils_1 = require("../utils/bcrypt.utils");
 const jwt_utils_1 = require("../utils/jwt.utils");
 const dotenv_1 = __importDefault(require("dotenv"));
-const nodemailer_utils_1 = require("../utils/nodemailer.utils");
+const resend_1 = require("resend");
 dotenv_1.default.config();
-//register 
+//register
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, email, password, phone } = req.body;
         if (!password) {
             throw new error_handler_middleware_1.default(`password is required`, 400);
         }
-        const user = yield user_model_1.default.create({ firstName, lastName, email, password, phone });
+        const user = yield user_model_1.default.create({
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+        });
         const hashedPassword = yield (0, bcrypt_utils_1.hashPassword)(password);
         user.password = hashedPassword;
         yield user.save();
         const _a = user._doc, { password: pass } = _a, newUser = __rest(_a, ["password"]);
         res.status(201).json({
-            message: 'User registered successfully',
-            status: 'success',
+            message: "User registered successfully",
+            status: "success",
             success: true,
-            data: newUser
+            data: newUser,
         });
     }
     catch (err) {
@@ -61,46 +67,51 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         //1. email password validation
         const { email, password } = req.body;
         if (!email || !password) {
-            throw new error_handler_middleware_1.default('Email and password are required', 400);
+            throw new error_handler_middleware_1.default("Email and password are required", 400);
         }
         //2. find user by email
         const user = yield user_model_1.default.findOne({ email }).select("+password");
         if (!user) {
-            throw new error_handler_middleware_1.default('Invalid Credentials', 400);
+            throw new error_handler_middleware_1.default("Invalid Credentials", 400);
         }
         //3. check if password matches (user.password === pass)
         const isPassMatch = yield (0, bcrypt_utils_1.compareHash)(password, user.password);
         if (!isPassMatch) {
-            throw new error_handler_middleware_1.default('Invalid Credentials', 400);
+            throw new error_handler_middleware_1.default("Invalid Credentials", 400);
         }
         const payload = {
             _id: user._id,
             role: user.role,
             email: user.email,
             firstName: user.firstName,
-            lastName: user.lastName
+            lastName: user.lastName,
         };
         //generate jwt token
         const access_token = (0, jwt_utils_1.generateToken)(payload);
         const _a = user._doc, { password: pass } = _a, loggedInUser = __rest(_a, ["password"]);
-        yield (0, nodemailer_utils_1.sendEmail)({
-            html: '<h1>Login Success</h1>',
-            subject: 'Login status',
-            to: 'ashutoshkuinkel7@gmail.com'
+        const resend = new resend_1.Resend("re_HyLv2LRq_8UUYZxsaPuruzFU37qj3yGQ8");
+        resend.emails.send({
+            from: `${process.env.SMTP_USER}`,
+            to: "ashutoshkuinkel7@gmail.com",
+            subject: "Logged in User",
+            html: "<p>Was this you that just logged into MERN Kart?</p>",
         });
-        res.cookie('access_token', access_token, {
-            secure: process.env.NODE_ENV === 'development' ? false : true,
+        res
+            .cookie("access_token", access_token, {
+            secure: process.env.NODE_ENV === "development" ? false : true,
             httpOnly: true,
             maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 1000,
-            sameSite: 'none'
-        }).status(200).json({
-            message: 'Login successful',
-            status: 'success',
+            sameSite: "none",
+        })
+            .status(200)
+            .json({
+            message: "Login successful",
+            status: "success",
             success: true,
             data: {
                 data: loggedInUser,
-                access_token
-            }
+                access_token,
+            },
         });
     }
     catch (err) {
@@ -115,17 +126,17 @@ const forgotPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const user = yield user_model_1.default.findOne({ email });
         if (!user) {
             return res.status(404).json({
-                message: 'User not found',
-                status: 'fail',
+                message: "User not found",
+                status: "fail",
                 success: false,
-                data: null
+                data: null,
             });
         }
         res.status(200).json({
-            message: 'Password reset link sent to your email',
-            status: 'success',
+            message: "Password reset link sent to your email",
+            status: "success",
             success: true,
-            data: null
+            data: null,
         });
     }
     catch (err) {
@@ -168,7 +179,7 @@ const changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
         const user = yield user_model_1.default.findOne({ email }).select("+password");
         if (!user) {
-            throw new error_handler_middleware_1.default('Something went wrong', 400);
+            throw new error_handler_middleware_1.default("Something went wrong", 400);
         }
         const isPassMatched = (0, bcrypt_utils_1.compareHash)(oldPassword, user.password);
         if (!isPassMatched) {
@@ -177,8 +188,8 @@ const changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         user.password = yield (0, bcrypt_utils_1.hashPassword)(newPassword);
         yield user.save();
         res.status(201).json({
-            message: 'Password updated successfully',
-            status: 'success',
+            message: "Password updated successfully",
+            status: "success",
             success: true,
         });
     }
@@ -190,16 +201,18 @@ exports.changePassword = changePassword;
 //logout
 const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.clearCookie('access_token', {
-            secure: process.env.NODE_ENV === 'development' ? false : true,
+        res
+            .clearCookie("access_token", {
+            secure: process.env.NODE_ENV === "development" ? false : true,
             httpOnly: true,
-            sameSite: 'none'
+            sameSite: "none",
         })
-            .status(200).json({
+            .status(200)
+            .json({
             message: `Successfully Logged out.`,
             success: true,
-            status: 'success',
-            data: null
+            status: "success",
+            data: null,
         });
     }
     catch (err) {
@@ -213,13 +226,13 @@ const profile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         const userId = req.user._id;
         const user = yield user_model_1.default.findById(userId);
         if (!user) {
-            throw new error_handler_middleware_1.default('User not found', 400);
+            throw new error_handler_middleware_1.default("User not found", 400);
         }
         res.status(200).json({
             message: `profile fetched.`,
             success: true,
-            status: 'success',
-            data: user
+            status: "success",
+            data: user,
         });
     }
     catch (err) {

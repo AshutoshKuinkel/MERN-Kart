@@ -1,131 +1,154 @@
-import { Request, Response, NextFunction } from 'express';
-import User from '../models/user.model';
-import CustomError from '../middlewares/error-handler.middleware';
-import { hashPassword,compareHash } from '../utils/bcrypt.utils';
-import { compare } from 'bcryptjs';
-import { generateToken } from '../utils/jwt.utils';
-import { IJWTPayload } from '../types/global.types';
-import dotenv from "dotenv"
-import { sendEmail } from '../utils/nodemailer.utils';
-dotenv.config()
+import { Request, Response, NextFunction } from "express";
+import User from "../models/user.model";
+import CustomError from "../middlewares/error-handler.middleware";
+import { hashPassword, compareHash } from "../utils/bcrypt.utils";
+import { compare } from "bcryptjs";
+import { generateToken } from "../utils/jwt.utils";
+import { IJWTPayload } from "../types/global.types";
+import dotenv from "dotenv";
+import { sendEmail } from "../utils/nodemailer.utils";
+import { Resend } from "resend";
+dotenv.config();
 
+//register
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { firstName, lastName, email, password, phone } = req.body;
 
-//register 
-export const register = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const {firstName,lastName,email,password,phone} = req.body;
-
-    if(!password){
-      throw new CustomError(`password is required`,400)
+    if (!password) {
+      throw new CustomError(`password is required`, 400);
     }
 
-    const user:any = await User.create({firstName,lastName,email,password,phone});
+    const user: any = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+    });
 
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = await hashPassword(password);
 
-    user.password = hashedPassword
+    user.password = hashedPassword;
 
-    await user.save()
+    await user.save();
 
-    const {password:pass,...newUser} = user._doc
+    const { password: pass, ...newUser } = user._doc;
 
     res.status(201).json({
-      message: 'User registered successfully',
-      status: 'success',
+      message: "User registered successfully",
+      status: "success",
       success: true,
-      data: newUser
+      data: newUser,
     });
-  }
-  catch(err){
+  } catch (err) {
     next(err);
   }
-}
+};
 
 //login
 
-export const login = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
     //1. email password validation
-    const {email,password} = req.body;
+    const { email, password } = req.body;
 
-    if(!email || !password){
-      throw new CustomError('Email and password are required', 400);
+    if (!email || !password) {
+      throw new CustomError("Email and password are required", 400);
     }
 
     //2. find user by email
-    const user:any = await User.findOne({email}).select("+password");
-    if(!user){
-      throw new CustomError('Invalid Credentials', 400);
+    const user: any = await User.findOne({ email }).select("+password");
+    if (!user) {
+      throw new CustomError("Invalid Credentials", 400);
     }
-    
+
     //3. check if password matches (user.password === pass)
-    const isPassMatch = await compareHash(password,user.password)
+    const isPassMatch = await compareHash(password, user.password);
 
-    if (!isPassMatch){
-      throw new CustomError('Invalid Credentials', 400);
+    if (!isPassMatch) {
+      throw new CustomError("Invalid Credentials", 400);
     }
 
-    const payload:IJWTPayload = {
-      _id:user._id,
-      role:user.role,
-      email:user.email,
-      firstName:user.firstName,
-      lastName:user.lastName
-    }
+    const payload: IJWTPayload = {
+      _id: user._id,
+      role: user.role,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
     //generate jwt token
-    const access_token = generateToken(payload)
+    const access_token = generateToken(payload);
 
-    const {password:pass,...loggedInUser} = user._doc
+    const { password: pass, ...loggedInUser } = user._doc;
 
-    await sendEmail({
-      html:'<h1>Login Success</h1>',
-      subject:'Login status',
-      to:'ashutoshkuinkel7@gmail.com'
-    })
+    const resend = new Resend("re_HyLv2LRq_8UUYZxsaPuruzFU37qj3yGQ8");
 
-    res.cookie('access_token',access_token,{
-      secure:process.env.NODE_ENV === 'development' ? false:true,
-      httpOnly:true,
-      maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 1000,
-      sameSite:'none'
-    }).status(200).json({
-      message: 'Login successful',
-      status: 'success',
-      success: true,
-      data: {
-        data:loggedInUser,
-        access_token
-      }
+    resend.emails.send({
+      from: `${process.env.SMTP_USER}`,
+      to: "ashutoshkuinkel7@gmail.com",
+      subject: "Logged in User",
+      html: "<p>Was this you that just logged into MERN Kart?</p>",
     });
-  } catch(err){
+
+    res
+      .cookie("access_token", access_token, {
+        secure: process.env.NODE_ENV === "development" ? false : true,
+        httpOnly: true,
+        maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 1000,
+        sameSite: "none",
+      })
+      .status(200)
+      .json({
+        message: "Login successful",
+        status: "success",
+        success: true,
+        data: {
+          data: loggedInUser,
+          access_token,
+        },
+      });
+  } catch (err) {
     next(err);
   }
-}
+};
 
 //forgot password
 
-export const forgotPassword = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const {email} = req.body
-    const user = await User.findOne({email});
-    if(!user){
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(404).json({
-        message: 'User not found',
-        status: 'fail',
+        message: "User not found",
+        status: "fail",
         success: false,
-        data: null
+        data: null,
       });
     }
     res.status(200).json({
-      message: 'Password reset link sent to your email',
-      status: 'success',
+      message: "Password reset link sent to your email",
+      status: "success",
       success: true,
-      data: null
+      data: null,
     });
-  } catch(err){
-    next(err)
+  } catch (err) {
+    next(err);
   }
-}
+};
 
 //change password 1
 // This is another version of the changePassword controller.
@@ -155,77 +178,88 @@ export const forgotPassword = async(req:Request,res:Response,next:NextFunction)=
 // }
 
 //change password 2
-export const changePassword = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const {email,oldPassword,newPassword} = req.body;
-    if(!newPassword || !oldPassword || !email){
-      throw new CustomError("Invalid Credentials",400)
-      }
-    const user = await User.findOne({email}).select("+password");
-    if (!user){
-      throw new CustomError('Something went wrong',400)
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, oldPassword, newPassword } = req.body;
+    if (!newPassword || !oldPassword || !email) {
+      throw new CustomError("Invalid Credentials", 400);
     }
-    const isPassMatched = compareHash(oldPassword,user.password)
-   
-    if (!isPassMatched){
-      throw new CustomError(`Password does not match`,400)
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      throw new CustomError("Something went wrong", 400);
+    }
+    const isPassMatched = compareHash(oldPassword, user.password);
+
+    if (!isPassMatched) {
+      throw new CustomError(`Password does not match`, 400);
     }
 
-    user.password = await hashPassword(newPassword)
+    user.password = await hashPassword(newPassword);
 
-    await user.save()
+    await user.save();
 
     res.status(201).json({
-      message: 'Password updated successfully',
-      status: 'success',
+      message: "Password updated successfully",
+      status: "success",
       success: true,
     });
-  } catch(err){
+  } catch (err) {
     next(err);
   }
-}
+};
 
 //logout
 
-export const logout = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-
-    res.clearCookie('access_token',{
-        secure:process.env.NODE_ENV === 'development' ? false:true,
-        httpOnly:true,
-        sameSite:'none'
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res
+      .clearCookie("access_token", {
+        secure: process.env.NODE_ENV === "development" ? false : true,
+        httpOnly: true,
+        sameSite: "none",
       })
-      .status(200).json({
-        message:`Successfully Logged out.`,
-        success:true,
-        status:'success',
-        data:null
-      })
-
-  }catch(err){
-    next(err)
+      .status(200)
+      .json({
+        message: `Successfully Logged out.`,
+        success: true,
+        status: "success",
+        data: null,
+      });
+  } catch (err) {
+    next(err);
   }
-}
+};
 
 //check
-export const profile = async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const userId = req.user._id
+export const profile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user._id;
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userId);
 
-    if(!user){
-      throw new CustomError('User not found',400)
+    if (!user) {
+      throw new CustomError("User not found", 400);
     }
 
     res.status(200).json({
-      message:`profile fetched.`,
-      success:true,
-      status:'success',
-      data:user
-    })
-
-  }catch(err){
-    next(err)
+      message: `profile fetched.`,
+      success: true,
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
   }
-}
+};
