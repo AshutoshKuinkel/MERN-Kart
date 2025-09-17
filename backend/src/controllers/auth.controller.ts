@@ -93,7 +93,7 @@ export const login = async (
     const resend = new Resend("re_HyLv2LRq_8UUYZxsaPuruzFU37qj3yGQ8");
 
     resend.emails.send({
-      from: `${process.env.SMTP_USER}`,
+      from: `ashutoshkuinkel7@gmail.com`,
       to: "ashutoshkuinkel7@gmail.com",
       subject: "Logged in User",
       html: "<p>Was this you that just logged into MERN Kart?</p>",

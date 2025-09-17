@@ -91,7 +91,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         const _a = user._doc, { password: pass } = _a, loggedInUser = __rest(_a, ["password"]);
         const resend = new resend_1.Resend("re_HyLv2LRq_8UUYZxsaPuruzFU37qj3yGQ8");
         resend.emails.send({
-            from: `${process.env.SMTP_USER}`,
+            from: `ashutoshkuinkel7@gmail.com`,
             to: "ashutoshkuinkel7@gmail.com",
             subject: "Logged in User",
             html: "<p>Was this you that just logged into MERN Kart?</p>",
