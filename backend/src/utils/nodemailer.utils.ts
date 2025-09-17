@@ -14,7 +14,9 @@ const transporter = nodemailer.createTransport({
     auth:{
       user:process.env.SMTP_USER,
       pass:process.env.SMTP_PASSWORD
-    }
+    },
+    connectionTimeout:30000,
+    socketTimeout:30000
 })
 
 type mailOption = {

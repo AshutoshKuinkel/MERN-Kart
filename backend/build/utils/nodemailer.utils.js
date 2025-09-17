@@ -26,7 +26,9 @@ const transporter = nodemailer_1.default.createTransport({
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
-    }
+    },
+    connectionTimeout: 30000,
+    socketTimeout: 30000
 });
 const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, html, cc = null, bcc = null, attachments = null }) {
     try {

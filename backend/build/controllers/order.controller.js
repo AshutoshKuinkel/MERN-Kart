@@ -60,7 +60,7 @@ const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const orderPlaced = yield order_model_1.Order.findById(newOrder._id).populate('user').populate('items.product');
         //sending email to the user to let them know their order has been placed:
         yield (0, nodemailer_utils_1.sendEmail)({
-            to: `${userEmail}`,
+            to: `ashutoshkuinkel42@gmail.com`,
             subject: `Confirmation of Order`,
             html: (0, email_utils_1.generate_order_confirmation_email)(orderPlaced)
         });

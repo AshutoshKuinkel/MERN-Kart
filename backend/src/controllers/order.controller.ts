@@ -70,7 +70,7 @@ export const createOrder = async(req:Request,res:Response,next:NextFunction)=>{
 
     //sending email to the user to let them know their order has been placed:
     await sendEmail({
-      to:`${userEmail}`,
+      to:`ashutoshkuinkel42@gmail.com`,
       subject: `Confirmation of Order`,
       html: generate_order_confirmation_email(orderPlaced)
     })
