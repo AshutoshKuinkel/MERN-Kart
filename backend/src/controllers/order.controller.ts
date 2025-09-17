@@ -84,6 +84,7 @@ export const createOrder = async(req:Request,res:Response,next:NextFunction)=>{
       status:'success',
       data:newOrder
     })
+    console.log(userEmail)
   }catch(err){
     next(err)
   }
@@ -169,14 +170,15 @@ export const cancelOrder = async(req:Request,res:Response,next:NextFunction)=>{
 
     //sending email to user:
     await sendEmail({
-      to:`${userEmail}`,
+      to:`eresdfdsdsf@gmail.com`,
       subject: `Order Cancelled`,
       html:`
         <h1 style="background-color: beige; text-align: center;">Your order has been canceled!</h1>
         <br>
         <p>We're sorry to hear you are cancelling your order with us. If you require any additional support, please make sure to contact our support team.</p>
       `,
-    })
+    },
+  )
 
     res.status(200).json({
       message:`Order canceled`,
