@@ -170,7 +170,7 @@ export const cancelOrder = async(req:Request,res:Response,next:NextFunction)=>{
 
     //sending email to user:
     await sendEmail({
-      to:`eresdfdsdsf@gmail.com`,
+      to:`ashutoshkuinkel42@gmail.com`,
       subject: `Order Cancelled`,
       html:`
         <h1 style="background-color: beige; text-align: center;">Your order has been canceled!</h1>

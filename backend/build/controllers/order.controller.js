@@ -149,7 +149,7 @@ const cancelOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const orders = yield order_model_1.Order.findByIdAndUpdate(id, { status: enum_types_1.orderStatus.CANCELED }, { new: true });
         //sending email to user:
         yield (0, nodemailer_utils_1.sendEmail)({
-            to: `eresdfdsdsf@gmail.com`,
+            to: `ashutoshkuinkel42@gmail.com`,
             subject: `Order Cancelled`,
             html: `
         <h1 style="background-color: beige; text-align: center;">Your order has been canceled!</h1>
