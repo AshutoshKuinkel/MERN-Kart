@@ -14,9 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const error_handler_middleware_1 = __importDefault(require("../middlewares/error-handler.middleware"));
-dotenv_1.default.config();
 //creating transporter:
 const transporter = nodemailer_1.default.createTransport({
     host: process.env.SMTP_HOST,
@@ -27,8 +25,6 @@ const transporter = nodemailer_1.default.createTransport({
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
     },
-    connectionTimeout: 30000,
-    socketTimeout: 30000
 });
 const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, html, cc = null, bcc = null, attachments = null }) {
     try {
@@ -50,6 +46,7 @@ const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subje
         yield transporter.sendMail(message);
     }
     catch (err) {
+        console.log(err);
         throw new error_handler_middleware_1.default('Error sending email', 500);
     }
 });

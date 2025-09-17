@@ -77,12 +77,11 @@ export const login = async(req:Request,res:Response,next:NextFunction)=>{
 
     const {password:pass,...loggedInUser} = user._doc
 
-    //add this to order controller:
-    // await sendEmail({
-    //   html:'<h1>Login Success</h1>',
-    //   subject:'Login status',
-    //   to:'eresdfdsdsf@gmail.com'
-    // })
+    await sendEmail({
+      html:'<h1>Login Success</h1>',
+      subject:'Login status',
+      to:'ashutoshkuinkel7@gmail.com'
+    })
 
     res.cookie('access_token',access_token,{
       secure:process.env.NODE_ENV === 'development' ? false:true,

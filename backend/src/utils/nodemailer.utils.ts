@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv"
 import CustomError from "../middlewares/error-handler.middleware";
-dotenv.config()
 
 
 //creating transporter:
@@ -15,8 +13,6 @@ const transporter = nodemailer.createTransport({
       user:process.env.SMTP_USER,
       pass:process.env.SMTP_PASSWORD
     },
-    connectionTimeout:30000,
-    socketTimeout:30000
 })
 
 type mailOption = {
@@ -51,6 +47,7 @@ try{
 
   await transporter.sendMail(message)
 }catch(err){
+  console.log(err)
   throw new CustomError('Error sending email',500)
 }
 }

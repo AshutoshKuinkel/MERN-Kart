@@ -29,6 +29,7 @@ const error_handler_middleware_1 = __importDefault(require("../middlewares/error
 const bcrypt_utils_1 = require("../utils/bcrypt.utils");
 const jwt_utils_1 = require("../utils/jwt.utils");
 const dotenv_1 = __importDefault(require("dotenv"));
+const nodemailer_utils_1 = require("../utils/nodemailer.utils");
 dotenv_1.default.config();
 //register 
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -82,12 +83,11 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         //generate jwt token
         const access_token = (0, jwt_utils_1.generateToken)(payload);
         const _a = user._doc, { password: pass } = _a, loggedInUser = __rest(_a, ["password"]);
-        //add this to order controller:
-        // await sendEmail({
-        //   html:'<h1>Login Success</h1>',
-        //   subject:'Login status',
-        //   to:'eresdfdsdsf@gmail.com'
-        // })
+        yield (0, nodemailer_utils_1.sendEmail)({
+            html: '<h1>Login Success</h1>',
+            subject: 'Login status',
+            to: 'ashutoshkuinkel7@gmail.com'
+        });
         res.cookie('access_token', access_token, {
             secure: process.env.NODE_ENV === 'development' ? false : true,
             httpOnly: true,
