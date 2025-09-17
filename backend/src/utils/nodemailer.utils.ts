@@ -3,11 +3,6 @@ import CustomError from "../middlewares/error-handler.middleware";
 
 //creating transporter:
 
-console.log(process.env.SMTP_HOST)
-console.log(process.env.SMTP_USER)
-console.log(process.env.SMTP_SERVICE)
-console.log(process.env.SMTP_PORT)
-
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
@@ -17,15 +12,6 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
   },
-});
-
-// Callback style
-transporter.verify((error, success) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log("Server is ready to take our messages");
-  }
 });
 
 type mailOption = {
@@ -46,6 +32,18 @@ export const sendEmail = async ({
   attachments = null,
 }: mailOption) => {
   try {
+    console.log(process.env.SMTP_HOST);
+    console.log(process.env.SMTP_USER);
+    console.log(process.env.SMTP_SERVICE);
+    console.log(process.env.SMTP_PORT);
+    // Callback style
+    transporter.verify((error, success) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Server is ready to take our messages");
+      }
+    });
     let message: Record<string, any> = {
       from: `MERN Kart <${process.env.SMTP_USER}>`,
       to,

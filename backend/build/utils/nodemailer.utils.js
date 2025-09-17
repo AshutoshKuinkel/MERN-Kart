@@ -16,10 +16,6 @@ exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const error_handler_middleware_1 = __importDefault(require("../middlewares/error-handler.middleware"));
 //creating transporter:
-console.log(process.env.SMTP_HOST);
-console.log(process.env.SMTP_USER);
-console.log(process.env.SMTP_SERVICE);
-console.log(process.env.SMTP_PORT);
 const transporter = nodemailer_1.default.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
@@ -30,17 +26,21 @@ const transporter = nodemailer_1.default.createTransport({
         pass: process.env.SMTP_PASSWORD,
     },
 });
-// Callback style
-transporter.verify((error, success) => {
-    if (error) {
-        console.error(error);
-    }
-    else {
-        console.log("Server is ready to take our messages");
-    }
-});
 const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, html, cc = null, bcc = null, attachments = null, }) {
     try {
+        console.log(process.env.SMTP_HOST);
+        console.log(process.env.SMTP_USER);
+        console.log(process.env.SMTP_SERVICE);
+        console.log(process.env.SMTP_PORT);
+        // Callback style
+        transporter.verify((error, success) => {
+            if (error) {
+                console.error(error);
+            }
+            else {
+                console.log("Server is ready to take our messages");
+            }
+        });
         let message = {
             from: `MERN Kart <${process.env.SMTP_USER}>`,
             to,
